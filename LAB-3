@@ -1,0 +1,75 @@
+mysql> SELECT * FROM TEAM;
++---------+------------+----------+--------+------------+
+| TEAM_ID | TEAM_NAME  | CITY     | COACH  | CAPTAIN_ID |
++---------+------------+----------+--------+------------+
+| 101     | RCB        | BANGLORE | RAVI   | 01         |
+| 102     | CSK        | CHENNAI  | DRAVID | 02         |
+| 103     | SRK        | RAJASTAN | SANJAY | 03         |
+| 104     | KRK        | KOLKATTA | SUNIL  | 04         |
+| 126     | daredevils | delhi    | setwag | 05         |
++---------+------------+----------+--------+------------+
+SELECT * FROM PLAYERS;
++-----------+-------------+----------+-----+---------+
+| PLAYER_ID | PLAYER_NAME | PHONE_NO | AGE | TEAM_ID |
++-----------+-------------+----------+-----+---------+
+| 01        | KOHLI       |       90 |  34 | 101     |
+| 02        | DHONI       |       99 |  40 | 102     |
+| 03        | SACHIN      |       73 |  46 | 103     |
+| 04        | GOUTAM      |       77 |  37 | 104     |
+| 05        | MANOJ       |       98 |  24 | 104     |
+| 06        | DINESH      |       96 |  44 | 101     |
++-----------+-------------+----------+-----+---------+
+SELECT * FROM MANOFMATCH;
++-----------+----------+
+| PLAYER_ID | MATCH_ID |
++-----------+----------+
+| 01        | M01      |
+| 04        | M02      |
+| 02        | M04      |
+| 03        | M07      |
++-----------+----------+
+SELECT * FROM MATCHES;
++----------+-----------+------------+----------+----------+----------+---------+
+| MATCH_ID | WINNER_ID | DATE       | TIME     | TEAM1_ID | TEAM2_ID | STDM_ID |
++----------+-----------+------------+----------+----------+----------+---------+
+| M01      | 101       | 1999-05-21 | 10:45:55 | 101      | 102      | S1      |
+| M02      | 103       | 1998-06-11 | 09:10:30 | 103      | 104      | S2      |
+| M04      | 102       | 2002-10-28 | 07:34:23 | 102      | 103      | S4      |
+| M07      | 101       | 1996-03-16 | 06:12:41 | 103      | 101      | S1      |
++----------+-----------+------------+----------+----------+----------+---------+
+SELECT * FROM STADIUM;
++---------+-----------+-----------+--------+-------------+
+| STDM_ID | STDM_NAME | CITY      | PIN    | AREA_NAME   |
++---------+-----------+-----------+--------+-------------+
+| S1      | CSWAMY    | BANGALORE | 574222 | MALLESHWARA |
+| S2      | NARENDRA  | MUMBAI    |  34520 | RAJAJI      |
+| S3      | ABC       | GURGAV    | 346563 | MGROAD      |
+| S4      | PQR       | DELHI     |  10544 | NEHRUNAGAR  |
+| S5      | XYZ       | CHENNAI   | 443251 | PUTTUR      |
++---------+-----------+-----------+--------+-------------+
+1)SELECT * FROM STADIUM
+    -> WHERE STDM_ID=(SELECT STDM_ID FROM MATCHES
+    -> GROUP BY STDM_ID ORDER BY COUNT(STDM_ID) DESC LIMIT 1);
++---------+-----------+-----------+--------+-------------+
+| STDM_ID | STDM_NAME | CITY      | PIN    | AREA_NAME   |
++---------+-----------+-----------+--------+-------------+
+| S1      | CSWAMY    | BANGALORE | 574222 | MALLESHWARA |
++---------+-----------+-----------+--------+-------------+
+2)SELECT PLAYER_NAME,TEAM_NAME,AGE
+    ->   FROM PLAYERS P,TEAM T  
+    ->    WHERE P.TEAM_ID=T.TEAM_ID
+    ->  AND AGE=(SELECT MIN(AGE) FROM PLAYERS);
++-------------+-----------+-----+
+| PLAYER_NAME | TEAM_NAME | AGE |
++-------------+-----------+-----+
+| MANOJ       | KRK       |  24 |
++-------------+-----------+-----+
+
+4)SELECT * FROM TEAM
+    -> WHERE TEAM_ID=(SELECT WINNER_ID FROM MATCHES GROUP BY WINNER_ID ORDER BY COUNT(MATCHES.WINNER_ID)DESC LIMIT 1);
++---------+-----------+----------+-------+------------+
+| TEAM_ID | TEAM_NAME | CITY     | COACH | CAPTAIN_ID |
++---------+-----------+----------+-------+------------+
+| 101     | RCB       | BANGLORE | RAVI  | 01         |
++---------+-----------+----------+-------+------------+
+
