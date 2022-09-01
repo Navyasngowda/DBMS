@@ -1,0 +1,246 @@
+4)Design An Er-Diagram For The Following Scenario, Convert The Same Into A Relational Model,Normalize Relations Into A Suitable Normal Form And Then Solve The Following Queries. A Country Can Have Many Tourist Places . Each Tourist Place Is Identified By Using
+Tourist_Place_Id, Having A Name, Belongs To A State, Number Of Kilometers Away From The
+------------------------------------------------------------------------------------------------------------------------------------------
+CREATE TABLE TOURIST_PLACE(
+T_PLACE_ID VARCHAR(10) PRIMARY KEY,
+T_PLACE_NAME VARCHAR(20),
+STATE CHAR(20),
+DISTANCE_KM INT(5),
+HISTORY VARCHAR(10));
+
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| T_PLACE_ID   | varchar(10) | NO   | PRI | NULL    |       |
+| T_PLACE_NAME | varchar(20) | YES  |     | NULL    |       |
+| STATE        | char(20)    | YES  |     | NULL    |       |
+| DISTANCE_KM  | int         | YES  |     | NULL    |       |
+| HISTORY      | varchar(10) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+
+
+INSERT INTO TOURIST_PLACE VALUES(11,'OOTY','KARNATAKA',160,'BEUTY');
+INSERT INTO TOURIST_PLACE VALUES(12,'AGRA','DELHI',200,'ARTCTRE');
+INSERT INTO TOURIST_PLACE VALUES(13,'VIRUPAKSHA TEMPLE','KARNATAKA',361,'HOLYP');
+INSERT INTO TOURIST_PLACE VALUES(16,'MYSORE','KARNATAKA',401,'PALACE');
+INSERT INTO TOURIST_PLACE VALUES(14,'MANALI','HIMACHAL',369,'CAMPING');
+INSERT INTO TOURIST_PLACE VALUES(15,'KOLLAM','KERALA','589','SCPLTRE');
+
++------------+-------------------+-----------+-------------+---------+
+| T_PLACE_ID | T_PLACE_NAME      | STATE     | DISTANCE_KM | HISTORY |
++------------+-------------------+-----------+-------------+---------+
+| 11         | OOTY              | KARNATAKA |         160 | BEUTY   |
+| 12         | AGRA              | DELHI     |         200 | ARTCTRE |
+| 13         | VIRUPAKSHA TEMPLE | KARNATAKA |         361 | HOLYP   |
+| 14         | MANALI            | HIMACHAL  |         369 | CAMPING |
+| 15         | KOLLAM            | KERALA    |         589 | SCPLTRE |
+| 16         | MYSORE            | KARNATAKA |         401 | PALACE  |
++------------+-------------------+-----------+-------------+---------+
+
+----------------------------------------------------------------------------------------
+CREATE TABLE TOURIST(
+TOURIST_ID VARCHAR(20) PRIMARY KEY,
+TOURIST_NAME CHAR(20),
+AGE INT(10),
+COUNTRY VARCHAR(20));
+
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| TOURIST_ID   | varchar(20) | NO   | PRI | NULL    |       |
+| TOURIST_NAME | char(20)    | YES  |     | NULL    |       |
+| AGE          | int         | YES  |     | NULL    |       |
+| COUNTRY      | varchar(20) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+
+
+INSERT INTO TOURIST VALUES(21,'PRAKASH',34,'INDIA');
+INSERT INTO TOURIST VALUES(22,'NAVYA',23,'JAPAN');
+INSERT INTO TOURIST VALUES(23,'NIKSHITA',27,'KOREA');
+INSERT INTO TOURIST VALUES(24,'CHARITRA','34','USA');
+INSERT INTO TOURIST VALUES(25,'SHRADHA',42,'CHINA');
+
++------------+--------------+------+---------+
+| TOURIST_ID | TOURIST_NAME | AGE  | COUNTRY |
++------------+--------------+------+---------+
+| 21         | PRAKASH      |   34 | INDIA   |
+| 22         | NAVYA        |   23 | JAPAN   |
+| 23         | NIKSHITA     |   27 | KOREA   |
+| 24         | CHARITRA     |   34 | USA     |
+| 25         | SHRADHA      |   42 | CHINA   |
++------------+--------------+------+---------+
+
+--------------------------------------------------------------------------------------
+CREATE TABLE VISITS(
+T_PLACE_ID VARCHAR(10) REFERENCES TOURIST_PLACE(T_PLACE_ID),
+TOURIST_ID VARCHAR(20) REFERENCES TOURIST(TOURIST_ID),
+VISITED_DATE DATE,
+PRIMARY KEY(T_PLACE_ID,TOURIST_ID));
+
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| T_PLACE_ID   | varchar(10) | NO   | PRI | NULL    |       |
+| TOURIST_ID   | varchar(20) | NO   | PRI | NULL    |       |
+| VISITED_DATE | date        | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+
+
+INSERT INTO VISITS VALUES(12,23,'2009-07-12');
+INSERT INTO VISITS VALUES(11,21,'1998-08-14');
+INSERT INTO VISITS VALUES(15,24,'2019-12-06');
+INSERT INTO VISITS VALUES(14,22,'2011-07-11');
+INSERT INTO VISITS VALUES(13,25,'2017-01-29');
+INSERT INTO VISITS VALUES(16,25,'2017-07-14');
+INSERT INTO VISITS VALUES(11,22,'2012-09-04');
+INSERT INTO VISITS VALUES(12,22,'2013-12-24');
+INSERT INTO VISITS VALUES(13,22,'2013-12-24');
+INSERT INTO VISITS VALUES(15,22,'2014-02-14');
+INSERT INTO VISITS VALUES(11,23,'2008-08-18');
+INSERT INTO VISITS VALUES(11,24,'2015-11-08');
+INSERT INTO VISITS VALUES(11,25,'2011-05-11');
+INSERT INTO VISITS VALUES(16,22,'2020-09-30');
+
++------------+------------+--------------+
+| T_PLACE_ID | TOURIST_ID | VISITED_DATE |
++------------+------------+--------------+
+| 11         | 21         | 1998-08-14   |
+| 11         | 22         | 2012-09-04   |
+| 11         | 23         | 2008-08-18   |
+| 11         | 24         | 2015-11-08   |
+| 11         | 25         | 2011-05-11   |
+| 12         | 22         | 2013-12-24   |
+| 12         | 23         | 2009-07-12   |
+| 13         | 22         | 2013-12-24   |
+| 13         | 25         | 2017-01-29   |
+| 14         | 22         | 2011-07-11   |
+| 15         | 22         | 2014-02-14   |
+| 15         | 24         | 2019-12-06   |
+| 16         | 22         | 2020-09-30   |
+| 16         | 25         | 2017-07-14   |
++------------+------------+--------------+
+
+
+INSERT INTO VISITS VALUES(&T_PLACE_ID,&TOURIST_ID,'&VISITED_DATE');
+
+-----------------------------------------------------------------------------------------
+CREATE TABLE E_MAIL(
+TOURIST_ID VARCHAR(20) REFERENCES TOURIST(TOURIST_ID ),
+T_EMAIL VARCHAR(20),
+PRIMARY KEY(TOURIST_ID,T_EMAIL));
+
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| TOURIST_ID | varchar(20) | NO   | PRI | NULL    |       |
+| T_EMAIL    | varchar(20) | NO   | PRI | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+
+
+INSERT INTO E_MAIL VALUES(21,'prakash@gmail.com');
+INSERT INTO E_MAIL VALUES(22,'navya@gmail.com');
+INSERT INTO E_MAIL VALUES(23,'nikshi@gmail.com');
+INSERT INTO E_MAIL VALUES(24,'chitra@gmail.com');
+INSERT INTO E_MAIL VALUES(25,'shradha@gmail.com');
+
++------------+-------------------+
+| TOURIST_ID | T_EMAIL           |
++------------+-------------------+
+| 21         | prakash@gmail.com |
+| 22         | navya@gmail.com   |
+| 23         | nikshi@gmail.com  |
+| 24         | chitra@gmail.com  |
+| 25         | shradha@gmail.com |
++------------+-------------------+
+
+____________________________________________________________________________________________
+____________________________________________________________________________________________
+
+1)List the state name which is having maximum number of tourist places.
+
+SELECT STATE,COUNT(T_PLACE_ID) 'MAX TOURIST PLACE'
+FROM TOURIST_PLACE GROUP BY STATE ORDER BY COUNT(T_PLACE_ID)DESC LIMIT 1;
+
++-----------+-------------------+
+| STATE     | COUNT(T_PLACE_ID) |
++-----------+-------------------+
+| KARNATAKA |                 3 |
++-----------+-------------------+
+
+
+---------------------------------------------------------------------------------------
+2)List details of Tourist place where maximum number of tourists visited.
+
+SELECT TP.T_PLACE_ID,TP.T_PLACE_NAME,TP.STATE,COUNT(V.TOURIST_ID )
+FROM TOURIST_PLACE TP,VISITS V 
+WHERE V.T_PLACE_ID=TP.T_PLACE_ID
+GROUP BY V.T_PLACE_ID
+ORDER BY COUNT(V.T_PLACE_ID)DESC LIMIT 1;
+
++------------+--------------+-----------+----------------------+
+| T_PLACE_ID | T_PLACE_NAME | STATE     | COUNT(V.TOURIST_ID ) |
++------------+--------------+-----------+----------------------+
+| 11         | OOTY         | KARNATAKA |                    5 |
++------------+--------------+-----------+----------------------+
+
+---------------------------------------------------------------------------------------
+3)List the details of tourists visited all tourist places of the state “KARNATAKA”.
+
+SELECT *
+FROM TOURIST
+WHERE TOURIST_ID IN(                                                                                 
+SELECT TOURIST_ID FROM VISITS,TOURIST_PLACE
+WHERE VISITS.T_PLACE_ID=TOURIST_PLACE.T_PLACE_ID AND STATE='KARNATAKA'
+GROUP BY TOURIST_ID 
+HAVING COUNT(DISTINCT STATE) IN
+(SELECT COUNT(DISTINCT STATE)
+FROM TOURIST_PLACE
+WHERE STATE='KARNATAKA'));
+
++------------+--------------+------+---------+
+| TOURIST_ID | TOURIST_NAME | AGE  | COUNTRY |
++------------+--------------+------+---------+
+| 21         | PRAKASH      |   34 | INDIA   |
+| 22         | NAVYA        |   23 | JAPAN   |
+| 23         | NIKSHITA     |   27 | KOREA   |
+| 24         | CHARITRA     |   34 | USA     |
+| 25         | SHRADHA      |   42 | CHINA   |
++------------+--------------+------+---------+
+
+-----------------------------------------------------------------------------------------
+4)Display the details of the tourists visited at least one tourist place of the state,
+ but visited all states tourist places.
+
+SELECT * FROM TOURIST
+WHERE TOURIST_ID IN
+(SELECT TOURIST_ID FROM VISITS,TOURIST_PLACE
+WHERE VISITS.T_PLACE_ID=TOURIST_PLACE.T_PLACE_ID
+GROUP BY TOURIST_ID 
+HAVING COUNT(DISTINCT STATE) IN
+(SELECT COUNT(DISTINCT STATE)FROM TOURIST_PLACE));
+
++------------+--------------+------+---------+
+| TOURIST_ID | TOURIST_NAME | AGE  | COUNTRY |
++------------+--------------+------+---------+
+| 22         | NAVYA        |   23 | JAPAN   |
++------------+--------------+------+---------+
+
+-----------------------------------------------------------------------------------------
+5)Display the details of the tourist place visited by the tourists of all country
+
+SELECT * FROM TOURIST_PLACE
+WHERE T_PLACE_ID IN(
+SELECT T_PLACE_ID FROM VISITS,TOURIST
+WHERE VISITS.TOURIST_ID=TOURIST.TOURIST_ID
+GROUP BY T_PLACE_ID 
+HAVING COUNT(DISTINCT COUNTRY)=(
+SELECT COUNT(DISTINCT COUNTRY) FROM TOURIST));
+
++------------+--------------+-----------+-------------+---------+
+| T_PLACE_ID | T_PLACE_NAME | STATE     | DISTANCE_KM | HISTORY |
++------------+--------------+-----------+-------------+---------+
+| 11         | OOTY         | KARNATAKA |         160 | BEUTY   |
++------------+--------------+-----------+-------------+---------+
+
+__________________________________________________________________________________________________________________________________________
+__________________________________________________________________________________________________________________________________________
