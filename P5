@@ -1,0 +1,181 @@
+5. A country wants to conduct an election for the parliament. A country having many constituencies. Each constituency is identified uniquely by Constituency_id, having the Name, belongs to a state,Number_of_voters. A constituency can have many voters. Each voter is uniquely identified by using Voter_id, having the Name, age, address (involves Houseno,city,state,pincode). Each voter belongs to only one constituency. There are many candidates contesting in the election. Each candidates are uniquely identified by using candidate_id, having Name, phone_no, age, state. A candidate belongs to only one party.Thereare many parties. Each party is uniquely identified by using Party_id, having Party_Name,Party_symbol. A candidate can contest from many constituencies under a same party. A party can have many candidates contesting from different constituencies. No constituency having the candidates from the same party. A constituency can have many
+contesting candidates belongs to different parties. Each voter votes only one candidate of his/her constituencty.
+------------------------------------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE CONSTITUENCY(
+CONS_ID INT(10) PRIMARY KEY,
+CONS_NAME VARCHAR(20),
+CONS_STATE VARCHAR(20),
+NO_OF_VOTERS INT(10));
+
+INSERT INTO CONSTITUENCY VALUES('01','MYSORE','KARNATAKA','780');
+INSERT INTO CONSTITUENCY VALUES('02','BANGALORE','KARNATAKA','100');
+INSERT INTO CONSTITUENCY VALUES('03','MADURAI','TAMILNADU','8500');
+INSERT INTO CONSTITUENCY VALUES('04','IMPAL','MANIPUR','950');
+INSERT INTO CONSTITUENCY VALUES('05','BHOPAL','MADYAPRADESH','6890');
+INSERT INTO CONSTITUENCY VALUES('06','PATNA','BIHAR','450');
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+CREATE TABLE PARTY(
+PID INT(20) PRIMARY KEY,
+PNAME VARCHAR(20),
+PSYMBOL VARCHAR(10));
+
+INSERT INTO PARTY VALUES('21','BJP','KAMALA');
+INSERT INTO PARTY VALUES('22','CONGRESS','HAND');
+INSERT INTO PARTY VALUES('23','BSP','ELEPHANT');
+INSERT INTO PARTY VALUES('24','CPI','HAMMER');
+INSERT INTO PARTY VALUES('25','JANATA','ARROW');
+ --------------------------------------------------------------------------------------------------------------------------------------------
+CREATE TABLE CANDIDATES(
+CAND_ID INT(15) PRIMARY KEY,
+PHONE_NO INT(10),
+AGE INT(2),
+STATE VARCHAR(20),
+NAME VARCHAR(20),
+PID INT REFERENCES PARTY(PID));
+
+INSERT INTO CANDIDATES VALUES('31','87654321','32','KARNATAKA','NAVYA','21');
+INSERT INTO CANDIDATES VALUES('32','97654321','45','KERALA','JAYA','22');
+INSERT INTO CANDIDATES VALUES('33','87645667','29','TAMILNADU','SUDHA','23');
+INSERT INTO CANDIDATES VALUES('34','87346321','56','PANJAB','MUKESH','24');
+INSERT INTO CANDIDATES VALUES('35','87456633','52','KARNATAKA','YADIYURAPPA','21');
+----------------------------------------------------------------------------------------------------------------------------------------------
+CREATE TABLE CONTEST
+(CONS_ID INT(10) REFERENCES CONSTITUENCY(CONS_ID),
+CAND_ID INT(15) REFERENCES CANDIDATES(CAND_ID),
+PRIMARY KEY(CONS_ID,CAND_ID));
+
+INSERT INTO CONTEST VALUES('01','31');
+INSERT INTO CONTEST VALUES('03','32');
+INSERT INTO CONTEST VALUES('02','32');
+INSERT INTO CONTEST VALUES('03','33');
+INSERT INTO CONTEST VALUES('04','34');
+INSERT INTO CONTEST VALUES('05','35');
+----------------------------------------------------------------------------------------------------------------------------------
+CREATE TABLE VOTER(
+VID INT(20) PRIMARY KEY,
+VNAME VARCHAR(20),
+VAGE INT(5),
+VADDR VARCHAR(20),
+CONS_ID INT(20) REFERENCES CONSTITUENCY(CONS_ID),
+CAND_ID INT(15) REFERENCES CANDIDATES(CAND_ID));
+
+INSERT INTO VOTER VALUES('301','NIKSHITA','26','MANI','04','31');
+INSERT INTO VOTER VALUES('302','NEHA','24','KURG','01','32');
+INSERT INTO VOTER VALUES('303','CHARITRA','36','SULYA','02','33');
+INSERT INTO VOTER VALUES('304','DEEPTHI','30','SURIKUMER','03','34');
+INSERT INTO VOTER VALUES('305','ANUSHA','39','NAGARA','03','35');
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+i. List the details of the candidates who are contesting from more than one constituencies which are belongs to different states.
+
+SELECT * FROM CANDIDATES
+WHERE CAND_ID IN(
+SELECT CAND_ID  FROM CONTEST
+JOIN CONSTITUENCY ON CONTEST.CONS_ID=CONSTITUENCY.CONS_ID
+GROUP BY CAND_ID HAVING COUNT(DISTINCT(CONS_STATE))>1);
++---------+----------+------+--------+------+------+
+| CAND_ID | PHONE_NO | AGE  | STATE  | NAME | PID  |
++---------+----------+------+--------+------+------+
+|      32 | 97654321 |   45 | KERALA | JAYA |   22 |
++---------+----------+------+--------+------+------+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+ii. Display the state name having maximum number of constituencies
+
+SELECT CONSTITUENCY.CONS_STATE ,COUNT(CONS_ID)
+FROM CONSTITUENCY
+GROUP BY CONSTITUENCY.CONS_STATE
+ORDER BY COUNT(CONS_ID)
+DESC LIMIT 1;
++------------+----------------+
+| CONS_STATE | COUNT(CONS_ID) |
++------------+----------------+
+| KARNATAKA  |              2 |
++------------+----------------+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+iii. Create a stored procedure to insert the tuple into the voter table by checking the voter
+age. If voter’s age is at least 18 years old, then insert the tuple into the voter else display the
+“Not an eligible voter msg” .
+
+DELIMITER//
+create procedure abc(IN vid int(10),IN vname varchar(20),IN age 
+int(10),IN city varchar(20),state varchar(20))
+begin
+declare msg varchar(20);
+if age>=18 then
+insert into VOTER (VID,VNAME,VAGE,VADDR) VALUES (VID,VNAME,AGE,CITY);
+set msg="row inserted";
+else
+set msg="VOTER not eligible";
+end if;
+select msg;
+end //
+DELIMITER ;
+
+mysql>source abc.sql
+Query OK, 0 rows affected, 2 warnings (0.01 sec)
+
+
+mysql>CALL abc(309,'nandu','17','mani','goa');
++--------------------+
+| msg                |
++--------------------+
+| VOTER not eligible |
++--------------------+
+mysql> CALL abc(310,'vidya','27','mani','goa');
++--------------+
+| msg          |
++--------------+
+| row inserted |
++--------------+
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+iv. Create a stored procedure to display the number_of_voters in the specified constituency.
+Where the constituency name is passed as an argument to the stored procedure.
+
+DELIMITER $$
+CREATE PROCEDURE NEW1(CONS_NAME VARCHAR(20))
+BEGIN
+SELECT NO_OF_VOTERS FROM CONSTITUENCY WHERE CONS_NAME=NAME;
+END$$
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+v. Create a TRIGGER to UPDATE the count of “ Number_of_voters” of the respective
+constituency in “CONSTITUENCY” table , AFTER inserting a tuple into the “VOTERS” table.
+
+DELIMITER $$
+CREATE TRIGGER NEW1 
+AFTER INSERT ON VOTER FOR EACH ROW 
+BEGIN
+UPDATE CONSTITUENCY
+SET CONSTITUENCY.NO_OF_VOTERS=CONSTITUENCY.NO_OF_VOTERS+3
+WHERE CONS_ID=NEW.CONS_ID;
+END$$
+
+INSERT INTO VOTER VALUES('308','MEGHA','45','MANI','4','34');
+-> $$
+
+SELECT * FROM CONSTITUENCY;
+    -> $$
++---------+-----------+--------------+--------------+
+| CONS_ID | CONS_NAME | CONS_STATE   | NO_OF_VOTERS |
++---------+-----------+--------------+--------------+
+|       1 | MYSORE    | KARNATAKA    |          100 |
+|       2 | BANGALORE | KARNATAKA    |          100 |
+|       3 | MADURAI   | TAMILNADU    |         8500 |
+|       4 | IMPAL     | MANIPUR      |          953 |
+|       5 | BHOPAL    | MADYAPRADESH |         6890 |
+|       6 | PATNA     | BIHAR        |          450 |
++---------+-----------+--------------+--------------+
+
+//EXTRA
+DROP TRIGGER NEW1;
+    -> $$
+SHOW TRIGGERS;
+--------------------------------------------------------------------------------------------------------------------------------
+
