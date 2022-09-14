@@ -1,5 +1,9 @@
 4)Design An Er-Diagram For The Following Scenario, Convert The Same Into A Relational Model,Normalize Relations Into A Suitable Normal Form And Then Solve The Following Queries. A Country Can Have Many Tourist Places . Each Tourist Place Is Identified By Using
-Tourist_Place_Id, Having A Name, Belongs To A State, Number Of Kilometers Away From The
+Tourist_Place_Id, Having A Name, Belongs To A State, Number Of Kilometers Away From The capital city of that state,history. There are many Tourists visits tourist places every year. 
+Each tourist is identified uniquely by using Tourist_id, having a Name, age, Country and 
+multiple emailids. A tourist visits many Tourist places, it is also required to record the 
+visted_date in the database. A tourist can visit a Tourist place many times at different dates. 
+A Tourist place can be visited by many tourists either in the same date or at different dates.
 ------------------------------------------------------------------------------------------------------------------------------------------
 CREATE TABLE TOURIST_PLACE(
 T_PLACE_ID VARCHAR(10) PRIMARY KEY,
