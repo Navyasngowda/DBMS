@@ -1,96 +1,18 @@
-create table branch(Branch_id char(10) primary key, 
+1. Create the following tables with properly specifying Primary keys, Foreign keys and solve
+the following queries.
+---------------------------------------------------------------------------------
+* BRANCH (Branchid, Branchname, HOD)
+create table branch(
+      Branch_id char(10) primary key, 
      Branch_name varchar(20),
      Hod varchar(20) );
-     
-+-------------+-------------+------+-----+---------+-------+
+ +-------------+-------------+------+-----+---------+-------+
 | Field       | Type        | Null | Key | Default | Extra |
 +-------------+-------------+------+-----+---------+-------+
 | Branch_id   | char(10)    | NO   | PRI | NULL    |       |
 | Branch_name | varchar(20) | YES  |     | NULL    |       |
 | Hod         | varchar(20) | YES  |     | NULL    |       |
 +-------------+-------------+------+-----+---------+-------+
-
-     
-     
-create table student(Usn char(10) primary key,
-     Name varchar(20) ,
-     Address varchar(50),
-     Branch_id char(10),
-     Sem int(3), 
- foreign key (Branch_id) references branch (Branch_id));
- 
-+-----------+-------------+------+-----+---------+-------+
-| Field     | Type        | Null | Key | Default | Extra |
-+-----------+-------------+------+-----+---------+-------+
-| Usn       | char(10)    | NO   | PRI | NULL    |       |
-| Name      | varchar(20) | YES  |     | NULL    |       |
-| Address   | varchar(50) | YES  |     | NULL    |       |
-| Branch_id | char(10)    | YES  | MUL | NULL    |       |
-| Sem       | int         | YES  |     | NULL    |       |
-+-----------+-------------+------+-----+---------+-------+
-
- 
-create table author(Author_id int(10) primary key,
-    Author_name varchar(20), 
-    Country varchar(20),
-    Age int(10));  
-    
-+-------------+-------------+------+-----+---------+-------+
-| Field       | Type        | Null | Key | Default | Extra |
-+-------------+-------------+------+-----+---------+-------+
-| Author_id   | int         | NO   | PRI | NULL    |       |
-| Author_name | varchar(20) | YES  |     | NULL    |       |
-| Country     | varchar(20) | YES  |     | NULL    |       |
-| Age         | int         | YES  |     | NULL    |       |
-+-------------+-------------+------+-----+---------+-------+
-    
-    
-create table book(Book_id char(10) primary key,
-   BooK_name varchar(20),
-   Author_id int(10), 
-   Publisher varchar(20),
-   Branch_id char(10),
-   foreign key (Branch_id) references branch (Branch_id),
-   foreign key (Author_id) references author(Author_id)); 
-   
-+-----------+-------------+------+-----+---------+-------+
-| Field     | Type        | Null | Key | Default | Extra |
-+-----------+-------------+------+-----+---------+-------+
-| Book_id   | char(10)    | NO   | PRI | NULL    |       |
-| BooK_name | varchar(20) | YES  |     | NULL    |       |
-| Author_id | int         | YES  | MUL | NULL    |       |
-| Publisher | varchar(20) | YES  |     | NULL    |       |
-| Branch_id | char(10)    | YES  | MUL | NULL    |       |
-+-----------+-------------+------+-----+---------+-------+
- 
-   
-create table borrow(Usn char(10), 
-     Book_id char(10),
-     Borrow_date date,
-     primary key(Usn,Book_id),
-     foreign key (Usn) references student(Usn),
-     foreign key (Book_id) references book (Book_id));
-     
- +-------------+----------+------+-----+---------+-------+
-| Field       | Type     | Null | Key | Default | Extra |
-+-------------+----------+------+-----+---------+-------+
-| Usn         | char(10) | NO   | PRI | NULL    |       |
-| Book_id     | char(10) | NO   | PRI | NULL    |       |
-| Borrow_date | date     | YES  |     | NULL    |       |
-+-------------+----------+------+-----+---------+-------+
-
-mysql> show tables;
-+-----------------------------+
-| Tables_in_VP21MC010_college |
-+-----------------------------+
-| author                      |
-| book                        |
-| borrow                      |
-| branch                      |
-| student                     |
-+-----------------------------+
-
-
 insert into branch values("B01","MCA","Vandana");
 insert into branch values("B02","MBA","Shreyas");
 insert into branch values("B03","CIVIL","Nethra");
@@ -108,6 +30,24 @@ mysql> select * from branch;
 | B05       | MECH        | Prasnna |
 +-----------+-------------+---------+
 
+------------------------------------------------------------------------------
+* STUDENT (USN, Name, Address, Branchid, sem)
+create table student(
+     Usn char(10) primary key,
+     Name varchar(20) ,
+     Address varchar(50),
+     Branch_id char(10),
+     Sem int(3), 
+ foreign key (Branch_id) references branch (Branch_id));
+ 
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| Usn       | char(10)    | NO   | PRI | NULL    |       |
+| Address   | varchar(50) | YES  |     | NULL    |       |
+| Branch_id | char(10)    | YES  | MUL | NULL    |       |
+| Sem       | int         | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
 insert into student values("4VP21MC010","Deepthi","Hassan","B01","2");
 insert into student values("4VP21BA005","Disha","Madikeri","B02","2");
 insert into student values("4VP21MB016","Dhanya","Puttur","B03","8");
@@ -129,8 +69,21 @@ mysql> select * from student;
 | 4VP21MC035 | Shrunga | Shirshi  | B01       |    1 |
 | 4VP21ME045 | Sanju   | Mysore   | B05       |    4 |
 +------------+---------+----------+-----------+------+
-
-
+---------------------------------------------------------------------------
+*AUTHOR (Authorid, Authorname, Country, age) 
+ create table author(
+    Author_id int(10) primary key,
+    Author_name varchar(20), 
+    Country varchar(20),
+    Age int(10));  
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| Author_id   | int         | NO   | PRI | NULL    |       |
+| Author_name | varchar(20) | YES  |     | NULL    |       |
+| Country     | varchar(20) | YES  |     | NULL    |       |
+| Age         | int         | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
 insert into author values("1","Ramez Elmari","Arlinhton","51");
 insert into author values("2","James Gosling","US","45");
 insert into author values("3","Ellis Horowitz","Japan","52");
@@ -148,14 +101,32 @@ mysql> select * from author;
 |         5 | Baidyanath Mishra | India     |   42 |
 +-----------+-------------------+-----------+------+
 
-
+--------------------------------------------------------------------------
+* BOOK (Bookid, Bookname, Authorid, Publisher, Branchid)
+create table book(
+   Book_id char(10) primary key,
+   BooK_name varchar(20),
+   Author_id int(10), 
+   Publisher varchar(20),
+   Branch_id char(10),
+   foreign key (Branch_id) references branch (Branch_id),
+   foreign key (Author_id) references author(Author_id)); 
+   
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| Book_id   | char(10)    | NO   | PRI | NULL    |       |
+| BooK_name | varchar(20) | YES  |     | NULL    |       |
+| Author_id | int         | YES  | MUL | NULL    |       |
+| Publisher | varchar(20) | YES  |     | NULL    |       |
+| Branch_id | char(10)    | YES  | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
 insert into book values("BK1","DMBS","1","Pearson","B01");
 insert into book values("BK2","Research Methodology","2","Pearson","B02");
 insert into book values("BK3","Data Structure","3","MC Graw Hill","B03");
 insert into book values("BK4","Thermo Dynamis","4","MC Graw Hill","B04");
 insert into book values("BK5","Heat Transfer","5","MC Graw Hill","B05");
 insert into book values("BK6","Algorithm","1","Taylor","B01");
-
 
 mysql> select * from book;
 +---------+----------------------+-----------+--------------+-----------+
@@ -169,16 +140,29 @@ mysql> select * from book;
 | BK6     | Algorithm            |         1 | Taylor       | B01       |
 +---------+----------------------+-----------+--------------+-----------+
 
-
-
+-------------------------------------------------------------------------------- 
+* BORROW (USN, Bookid, Borrowed_Date)  
+create table borrow(
+     Usn char(10), 
+     Book_id char(10),
+     Borrow_date date,
+     primary key(Usn,Book_id),
+     foreign key (Usn) references student(Usn),
+     foreign key (Book_id) references book (Book_id));
+     
+ +-------------+----------+------+-----+---------+-------+
+| Field       | Type     | Null | Key | Default | Extra |
++-------------+----------+------+-----+---------+-------+
+| Usn         | char(10) | NO   | PRI | NULL    |       |
+| Book_id     | char(10) | NO   | PRI | NULL    |       |
+| Borrow_date | date     | YES  |     | NULL    |       |
++-------------+----------+------+-----+---------+-------+
 insert into borrow values("4VP21MC010","BK1","2010-05-21");
 insert into borrow values("4VP21BA005","BK2","2018-11-11");
 insert into borrow values("4VP21MB016","BK3","2009-02-10");
 insert into borrow values("4VP21CS001","BK4","2019-12-13");
 insert into borrow values("4VP21ME045","BK5","2004-01-01");
 insert into borrow values("4VP21MC010","BK2","2011-08-20");
-
-
 mysql> select * from borrow;
 +------------+---------+-------------+
 | Usn        | Book_id | Borrow_date |
@@ -190,15 +174,27 @@ mysql> select * from borrow;
 | 4VP21MC010 | BK2     | 2011-08-20  |
 | 4VP21ME045 | BK5     | 2004-01-01  |
 +------------+---------+-------------+
+------------------------------------------------------------------------
+mysql> show tables;
++-----------------------------+
+| Tables_in_VP21MC010_college |
++-----------------------------+
+| author                      |
+| book                        |
+| borrow                      |
+| branch                      |
+| student                     |
++-----------------------------+
+--------------------------------------------------------------
 
-
-1) select usn,name 
+1).List the details of Students who are all studying in 2nd sem MCA. 
+  
+  select usn,name 
    from student,branch
    where student.Branch_id=branch.Branch_id 
-   and Branch_name="MCA";
-
+   and Branch_name="MCA"
+   order by Name;
 OR
-
 select usn,name 
 from student s,branch b
 where s.Branch_id=b.Branch_id 
@@ -210,7 +206,22 @@ and Branch_name="MCA";
 | 4VP21MC010 | Deepthi |
 | 4VP21MC018 | Jhanu   |
 +------------+---------+
+-----------------------------------------------------------------------------------------
+2)List the students who are not borrowed any books.
+SELECT DISTINCT NAME
+FROM STUDENT,BORROW
+WHERE STUDENT.USN NOT IN
+(SELECT USN FROM BORROW);
++---------+
+| Name    |
++---------+
+| Pallavi |
+| Jhanu   |
+| Shrunga |
++---------+
 
+---------------------------------------------------------------------------------------------
+* ADDTIONAL *
 select * from author where Country like "%nd%";
 OR
 select * from author where Country like "_nd__";
@@ -254,32 +265,6 @@ mysql> select Distinct Branch_id from student;
 | B05       |
 +-----------+
 
-select Usn,Name from student s,branch b
-where s.Branch_id=b.Branch_id and
-Branch_name="MCA" and Sem=2;
-
-+------------+---------+
-| Usn        | Name    |
-+------------+---------+
-| 4VP21MC010 | Deepthi |
-| 4VP21MC018 | Jhanu   |
-+------------+---------+
-
-
-select usn,name 
-from student s,branch b
-where s.Branch_id=b.Branch_id 
-and Branch_name="MCA"
-order by Name;
-
-+------------+---------+
-| usn        | name    |
-+------------+---------+
-| 4VP21MC010 | Deepthi |
-| 4VP21MC018 | Jhanu   |
-| 4VP21MC035 | Shrunga |
-+------------+---------+
-
 select Usn from student Union
 select usn from borrow;
 
@@ -296,32 +281,11 @@ select usn from borrow;
 | 4VP21ME045 |
 +------------+
 
-select Distinct Name from student s,borrow b
-where s.Usn=b.Usn;
-OR
-select Distinct Name from student s,borrow b
-where s.Usn in(select Usn from borrow);
 
-+---------+
-| Name    |
-+---------+
-| Deepthi |
-| Disha   |
-| Dhanya  |
-| Anaga   |
-| Sanju   |
-+---------+
 
 2)  select Distinct Name from student s,borrow b
     where s.Usn not in(select Usn from borrow);
 
-+---------+
-| Name    |
-+---------+
-| Pallavi |
-| Jhanu   |
-| Shrunga |
-+---------+
 
 select count(Author_name) from author;
 OR
@@ -340,9 +304,10 @@ OR
 +------------------+
 |                6 |
 +------------------+
+-----------------------------------------------------------------------------------------------------------------------
+3)Display the USN, Student name, Branch_name, Book_name, Author_name,Books_Borrowed_Date of 2nd sem MCA Students who borrowed books. 
 
-
-3) select student.Usn,student.Name,Branch_name,Author_name,borrow_date,BooK_name
+select student.Usn,student.Name,Branch_name,BooK_name,Author_name,borrow_date
    from student,branch,author,borrow,book
    where student.Usn=borrow.Usn and
    student.Branch_id=branch.Branch_id and
@@ -357,9 +322,11 @@ OR
 | 4VP21MC010 | Deepthi | MCA         | Ramez Elmari  | 2010-05-21  | DMBS                 |
 | 4VP21MC010 | Deepthi | MCA         | James Gosling | 2011-08-20  | Research Methodology |
 +------------+---------+-------------+---------------+-------------+----------------------+
+-----------------------------------------------------------------------------------------------------------------------
 
+4).Display the number of books written by each Author
 
-4) select book.Author_id,Author_name,count(*) as total
+    select book.Author_id,Author_name,count(*) as total
    from  book,author
    where book.Author_id=author.Author_id
    group by book.Author_id;
@@ -373,9 +340,9 @@ OR
 |         4 | Deepak kahamani   |     1 |
 |         5 | Baidyanath Mishra |     1 |
 +-----------+-------------------+-------+
-
-
-5)  select *
+----------------------------------------------------------------------------------------------------------------
+5) Display the student details who borrowed more than two books.
+    select *
     from student
     where usn in(select Usn from borrow 
     group by Usn having count(Usn)>=2);
@@ -384,7 +351,7 @@ OR
 +------------+---------+---------+-----------+------+
 | 4VP21MC010 | Deepthi | Hassan  | B01       |    2 |
 +------------+---------+---------+-----------+------+
-
+------------------------------------------------------------------------------------------------------------------
 select BooK_name 
 from book
 order by BooK_name desc; 
@@ -398,22 +365,22 @@ order by BooK_name desc;
 | Data Structure       |
 | Algorithm            |
 +----------------------+
+-----------------------------------------------------------------------------------------------------------------
+6)Display the student details who borrowed more than two books.
 
-6)SELECT * FROM STUDENT S WHERE
+SELECT * FROM STUDENT S WHERE
 EXISTS
 (SELECT BR.USN 
 FROM BORROW BR,BOOK BK
 WHERE BR.BOOK_ID=BK.BOOK_ID AND BR.USN=S.USN
 GROUP BY USN
 HAVING COUNT(DISTINCT AUTHOR_ID)>1);
-
-
 +------------+---------+---------+-----------+------+
 | Usn        | Name    | Address | Branch_id | Sem  |
 +------------+---------+---------+-----------+------+
 | 4VP21MC010 | Deepthi | Hassan  | B01       |    2 |
 +------------+---------+---------+-----------+------+
-
+-------------------------------------------------------------------------------------------------------------------
 
 select Usn 
 from borrow br,book bk
@@ -425,18 +392,20 @@ group by Usn having count(Author_id)>1;
 +------------+
 | 4VP21MC010 |
 +------------+
+--------------------------------------------------------------------------------------------------------------------------------
+7)Display the Book names in descending order of their names
 
-7)select BOOK_NAME
+select BOOK_NAME
 FROM BOOK
 ORDER BY BOOK_NAME DESC;
+------------------------------------------------------------------------------------------------------------------------
+8)List the details of students who borrowed the books which are all published by the same publisher. 
 
-
-
-8)SELECT * FROM STUDENT  WHERE
+SELECT * FROM STUDENT  WHERE
        EXISTS
        (SELECT BR.USN
        FROM BORROW BR,BOOK BK
       WHERE BR.BOOK_ID=BK.BOOK_ID AND BR.USN=STUDENT.USN
       GROUP BY USN
       HAVING COUNT( BK.PUBLISHER)=1);
-
+---------------------------------------------------------------------------------------------------------------------------
