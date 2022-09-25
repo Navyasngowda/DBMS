@@ -102,7 +102,7 @@ WINNER_OF_MATCH CHAR(10) NOT NULL,
 FOREIGN KEY(WINNER_OF_MATCH) references TEAM(TEAM_ID),
 FOREIGN KEY(STDM_ID ) references STADIUM(STDM_ID),
 FOREIGN KEY(TEAMID_1) references TEAM(TEAM_ID),
-FOREIGN KEY(TEAMID_2) references TEAM(CAPTAIN_ID));
+FOREIGN KEY(TEAMID_2) references TEAM(TEAM_ID));
 
 insert into Matches values('M01','T01','1999-05-21','10:45:55','T01','T02','S01');
 insert into Matches values('M02','T03','1998-06-11','09:10:30','T03','T04','S02');
