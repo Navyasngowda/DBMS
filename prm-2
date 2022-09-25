@@ -1,4 +1,17 @@
-create table student(Usn varchar(10) primary key,
+2. Consider the following schema: 
+STUDENT (USN, name, date_of_birth, branch, mark1, mark2, mark3, total, GPA) 
+Execute the following queries: 
+i. Update the column total by adding the columns mark1, mark2, mark3. 
+ii. Find the GPA score of all the students. 
+iii. Find the students who born on a particular year of birth from the date_of_birth column. 
+iv. List the students who are studying in a particular branch of study. 
+v. Find the maximum GPA score of the student branch-wise. 
+vi. Find the students whose name starts with the alphabet “S”. 
+vii. Find the students whose name ends with the alphabets “AR”. 
+viii. Delete the student details whose USN is given as 1001. 
+--------------------------------_----------------------------------------
+create table student(
+Usn varchar(10) primary key,
 Name char(20),
 Dob date,
 Branch char(10),
