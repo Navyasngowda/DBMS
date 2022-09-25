@@ -64,7 +64,9 @@ mysql> select * from student;
 | 4VP21MC010 | Deepthi  | 2000-10-12 | MCA        | 82.00 | 85.00 | 80.00 |  NULL | NULL |
 +------------+----------+------------+------------+-------+-------+-------+-------+------+
 
-1.update student set Total=mark1+mark2+mark3;
+i. Update the column total by adding the columns mark1, mark2, mark3. 
+up
+date student set Total=mark1+mark2+mark3;
 
 +------------+----------+------------+------------+-------+-------+-------+--------+------+
 | Usn        | Name     | Dob        | Branch     | Mark1 | Mark2 | Mark3 | Total  | Gpa  |
