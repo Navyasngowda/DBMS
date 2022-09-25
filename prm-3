@@ -187,22 +187,29 @@ select * from STADIUM where SID =(select SID from MATCHES group by SID order by 
 ---------------------------------------------------------------------
  iii. List the details of the player who is not a captain but got the man_of _match award at least in two matches. 
 
-select * from PLAYER
-where PID not in(
-select captainId from TEAM)and 
-PID IN(select MAN_OF_MATCH 
-from MATCHES 
-group by MAN_OF_MATCH having count(MAN_OF_MATCH)=2);
-+-----+-------+-----+------+
-| PID | PNAME | AGE | TID  |
-+-----+-------+-----+------+
-| 5   | kohli |  23 | 126  |
-+-----+-------+-----+------+
+select *  
+from Player 
+where Player_id in(select Player_id from ManOfMatch
+where Player_id not in(select Captain_id from Team)
+group by Player_id having count(Player_id)>=2);
+
++-----------+-------------+------+------------+---------+
+| Player_id | Player_name | Age  | Ph_no      | Team_id |
++-----------+-------------+------+------------+---------+
+| P07       | kohli       |   50 | 9449129979 | NULL    |
++-----------+-------------+------+------------+---------++
  --------------------------------------------------------------------------------
  iv. Display the Team details who won the maximum matches. 
 
-SELECT TEAM_NAME,MIN(AGE)
- FROM TEAM
- WHERE TEAM_ID IN( SELECT TEAM_ID FROM PLAYERS GROUP BY(TEAM_ID) ORDER BY AGE);
+select * 
+from Team
+where Team_id=( select Winner_id from Matches 
+group by Winner_id
+order by count(Match1.Winner_id)desc limit 1);
 
++---------+-----------+--------+-----------+------------+
+| Team_id | Team_name | Coach  | City      | Captain_id |
++---------+-----------+--------+-----------+------------+
+| T01     | RCB       | Dravid | Bangalore | P01        |
++---------+-----------+--------+-----------+------------+
 ------------------------------------------------------------------------------------------------------------------
